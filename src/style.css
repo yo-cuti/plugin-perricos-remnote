@@ -30,6 +30,7 @@ body,
 :host {
   margin: 0; /* 1 */
   line-height: inherit; /* 2 */
+  width: fit-content;
 }
 
 /**

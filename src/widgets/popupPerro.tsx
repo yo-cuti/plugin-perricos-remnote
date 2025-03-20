@@ -7,19 +7,27 @@ import {
     WidgetLocation,
   } from "@remnote/plugin-sdk";
   import { tomaPerrico } from "../lib/perricos";
+  import { useEffect, useState } from "react";
 //   import { randomMotivation } from "../lib/motivation";
   
-  async function PopupPerro() {
+  function PopupPerro() {
     const plugin = usePlugin();
-    let src;
-    await tomaPerrico().then((perro) => {
+    const [src, setSrc] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+      const fetchPerro = async () => {
+        const perro = await tomaPerrico();
         if (perro) {
-            src = perro
-            console.log("URL del perrico:", perro);
+          setSrc(perro);
+          console.log("URL del perrico:", perro);
         } else {
-            console.log("No dog image found.");
+          console.log("No dog image found.");
         }
-    });
+      };
+
+      fetchPerro();
+    }, []);
+
     // Get the seenCards value from session storage
     const [seenCards] = useSessionStorageState("seenCards", 0);
   
@@ -40,12 +48,12 @@ import {
               const { floatingWidgetId } = await plugin.widget.getWidgetContext<WidgetLocation.FloatingWidget>();
               await plugin.window.closeFloatingWidget(floatingWidgetId);
             }}
-            className="cursor-pointer rounded-md border border-solid grid gap-1 grid-cols-2 rn-clr-background-primary rn-clr-content-primary"
+            className="cursor-pointer rounded-md border border-solid flex gap-1 justify-center align-middle rn-clr-background-primary rn-clr-content-primary w-fit"
           >
             <img src={src} className="max-h-[200px] w-auto rounded-l-md" />
-            <div className="flex text-center text-lg items-center pr-2">
+            <div className="block text-center text-lg pr-2 w-[calc-size(fit-content,_size_+_20px)]">
               {/* Wow! {seenCards} cards done! {randomMotivation()}! */}
-              'Perro'
+              'Perro guay'
             </div>
           </div>
         }

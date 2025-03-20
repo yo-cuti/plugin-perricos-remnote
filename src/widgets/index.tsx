@@ -76,7 +76,7 @@ async function onActivate(plugin: ReactRNPlugin) {
     WidgetLocation.FloatingWidget,
     {
       dimensions: {
-        width: 300,
+        width: "auto",
         height: "auto",
       },
     }
