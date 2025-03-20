@@ -9,10 +9,10 @@ import {
   import { tomaPerrico } from "../lib/perricos";
 //   import { randomMotivation } from "../lib/motivation";
   
-  function PopupPerro() {
+  async function PopupPerro() {
     const plugin = usePlugin();
     let src;
-    tomaPerrico().then((perro) => {
+    await tomaPerrico().then((perro) => {
         if (perro) {
             src = perro
             console.log("URL del perrico:", perro);
@@ -45,7 +45,7 @@ import {
             <img src={src} className="max-h-[200px] w-auto rounded-l-md" />
             <div className="flex text-center text-lg items-center pr-2">
               {/* Wow! {seenCards} cards done! {randomMotivation()}! */}
-              'Ole!'
+              'Perro'
             </div>
           </div>
         }
