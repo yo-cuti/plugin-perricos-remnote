@@ -1,43 +1,86 @@
-import { declareIndexPlugin, ReactRNPlugin, WidgetLocation } from '@remnote/plugin-sdk';
-import '../style.css';
-import '../App.css';
+import {
+  WidgetLocation,
+  AppEvents,
+  RNPlugin,
+  declareIndexPlugin,
+  ReactRNPlugin,
+} from "@remnote/plugin-sdk";
+import "../style.css";
+
+async function showDoggo(
+  plugin: RNPlugin,
+  position?: { top?: number; bottom?: number; left?: number; right?: number },
+  classContainer?: string
+) {
+  await plugin.window.openFloatingWidget(
+    "puppy_popup",
+    position || { top: 0, bottom: 0, left: 0, right: 0 },
+    classContainer
+  );
+}
 
 async function onActivate(plugin: ReactRNPlugin) {
-  // Register settings
-  await plugin.settings.registerStringSetting({
-    id: 'name',
-    title: 'What is your Name?',
-    defaultValue: 'Bob',
-  });
-
-  await plugin.settings.registerBooleanSetting({
-    id: 'pizza',
-    title: 'Do you like pizza?',
-    defaultValue: true,
-  });
+  // Initialize the seenCards session storage variable.
+  // Session storage is like global state for your plugin
+  // which can be accessed in your widget components.
+  //
+  // It is better than a normal global variable in cases
+  // where you want to react to changes in the variable's
+  // value - components can use the `useSessionStorage`
+  // hook to re-render when a session storage variable changes.
+  await plugin.storage.setSession("seenCards", 0);
 
   await plugin.settings.registerNumberSetting({
-    id: 'favorite-number',
-    title: 'What is your favorite number?',
-    defaultValue: 42,
+    id: "cardInterval",
+    title: "Number of cards between puppies",
+    defaultValue: 10,
   });
 
-  // A command that inserts text into the editor if focused.
+  // When the user completes a card, we check if they
+  // have seen the number of cards specified in the card
+  // interval setting. If so we show the popup.
+  plugin.event.addListener(AppEvents.QueueCompleteCard, undefined, async () => {
+    const cardInterval = Number(
+      await plugin.settings.getSetting("cardInterval")
+    );
+    const seenCards: number =
+      ((await plugin.storage.getSession<number>("seenCards")) || 0) + 1;
+    await plugin.storage.setSession("seenCards", seenCards);
+    if (seenCards % cardInterval === 0) {
+      // Opens a floating widget popup 180px above the show answer buttons.
+      // The "rn-queue..." string is a classname representing the container
+      // around the show answer buttons.
+      // We use a small setTimeout delay to make sure the queue and show answer
+      // button have finished rendering before trying to show the popup.
+      setTimeout(() => {
+        showDoggo(plugin, { top: -180, left: 0 }, "rn-queue__show-answer-btn");
+      }, 25);
+    }
+  });
+
+  // Reset the seen cards counter when the user enters the queue.
+  plugin.event.addListener(AppEvents.QueueEnter, undefined, () => {
+    plugin.storage.setSession("seenCards", 0);
+  });
+
+  // A test command so you can see how the popup looks.
   await plugin.app.registerCommand({
-    id: 'editor-command',
-    name: 'Editor Command',
-    action: async () => {
-      plugin.editor.insertPlainText('Hello World!');
-    },
+    id: "showDoggo",
+    name: "Show Doggo",
+    action: () => showDoggo(plugin),
   });
 
-  // Show a toast notification to the user.
-  await plugin.app.toast("I'm a toast!");
-
-  // Register a sidebar widget.
-  await plugin.app.registerWidget('sample_widget', WidgetLocation.RightSidebar, {
-    dimensions: { height: 'auto', width: '100%' },
-  });
+  // Register the puppy popup widget component.
+  await plugin.app.registerWidget(
+    "puppy_popup",
+    WidgetLocation.FloatingWidget,
+    {
+      dimensions: {
+        width: 300,
+        height: "auto",
+      },
+    }
+  );
 }
 
 async function onDeactivate(_: ReactRNPlugin) {}
