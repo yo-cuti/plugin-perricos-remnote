@@ -7,13 +7,13 @@ import {
 } from "@remnote/plugin-sdk";
 import "../style.css";
 
-async function showDoggo(
+async function muestraPerro(
   plugin: RNPlugin,
   position?: { top?: number; bottom?: number; left?: number; right?: number },
   classContainer?: string
 ) {
   await plugin.window.openFloatingWidget(
-    "puppy_popup",
+    "popupPerro",
     position || { top: 0, bottom: 0, left: 0, right: 0 },
     classContainer
   );
@@ -53,7 +53,7 @@ async function onActivate(plugin: ReactRNPlugin) {
       // We use a small setTimeout delay to make sure the queue and show answer
       // button have finished rendering before trying to show the popup.
       setTimeout(() => {
-        showDoggo(plugin, { top: -180, left: 0 }, "rn-queue__show-answer-btn");
+        muestraPerro(plugin, { top: -180, left: 0 }, "rn-queue__show-answer-btn");
       }, 25);
     }
   });
@@ -65,14 +65,14 @@ async function onActivate(plugin: ReactRNPlugin) {
 
   // A test command so you can see how the popup looks.
   await plugin.app.registerCommand({
-    id: "showDoggo",
-    name: "Show Doggo",
-    action: () => showDoggo(plugin),
+    id: "muestraPerro",
+    name: "Ver Perro",
+    action: () => muestraPerro(plugin),
   });
 
   // Register the puppy popup widget component.
   await plugin.app.registerWidget(
-    "puppy_popup",
+    "popupPerro",
     WidgetLocation.FloatingWidget,
     {
       dimensions: {

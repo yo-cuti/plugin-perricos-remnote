@@ -9,7 +9,7 @@ import {
   import { tomaPerrico } from "../lib/perricos";
 //   import { randomMotivation } from "../lib/motivation";
   
-  function PuppyPopup() {
+  function PopupPerro() {
     const plugin = usePlugin();
     let src;
     tomaPerrico().then((perro) => {
@@ -53,4 +53,4 @@ import {
     );
   }
   
-  renderWidget(PuppyPopup);
+  renderWidget(PopupPerro);
