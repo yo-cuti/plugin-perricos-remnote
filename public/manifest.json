@@ -1,5 +1,6 @@
 {
   "author": "yo (cuti)",
+  "repoUrl": "https://github.com/yo-cuti/plugin-perricos-remnote",
   "name": "😛 perricos",
   "description": "Te tira las foto de los perricos cuando aciertas una flashcard, pero tiene más fotos de perricos",
   "enableOnMobile": false,
