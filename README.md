@@ -28,6 +28,10 @@ al azar, después la imagen se muestra en el "popup" junto a una frase de motiva
 
 ## English
 
+### What does it do?
+
+It shows motivational dog popups in the flashcard queue after completing a certain number of cards, but extended with the use of an API and modified motivational messages.
+
 ### Usage:
 
 **Install and adjust the settings from the config menu of the plugin**
