@@ -20,25 +20,41 @@ async function muestraPerro(
 }
 
 async function onActivate(plugin: ReactRNPlugin) {
-  // Initialize the seenCards session storage variable.
-  // Session storage is like global state for your plugin
-  // which can be accessed in your widget components.
+  // Inicializamos la vairable seenCards del session storage.
+  // El session storage es como un estado global del plugin
+  // al cual se puede acceder en los componentes del widget.
   //
-  // It is better than a normal global variable in cases
-  // where you want to react to changes in the variable's
-  // value - components can use the `useSessionStorage`
-  // hook to re-render when a session storage variable changes.
+  // Es mejor que una variable normal en los casos en los que
+  // se quiere reaccionar a cambios en el valor de la variable
+  // Los componentes pueden usar el hook `useSessionStorage`
+  // para re-renderizarse cuando una variable del sesion storage cambia.
   await plugin.storage.setSession("seenCards", 0);
 
   await plugin.settings.registerNumberSetting({
     id: "cardInterval",
-    title: "Number of cards between puppies",
+    title: "Número de cartas entre cada perrico",
     defaultValue: 10,
   });
 
-  // When the user completes a card, we check if they
-  // have seen the number of cards specified in the card
-  // interval setting. If so we show the popup.
+  await plugin.settings.registerDropdownSetting({
+    id: "language",
+    title: "Idioma de las frases de motivación",
+    defaultValue: "es",
+    options: [{
+      key: "0",
+      label: "Español",
+      value: "es",
+    },
+    {
+      key: "1",
+      label: "English",
+      value: "en",
+    }]
+  });
+
+  // Cuando el usuario completa una carta, comprobamos si ha
+  // visto el número de cartas especificado en los ajustes.
+  // De ser así mostramos el popup.
   plugin.event.addListener(AppEvents.QueueCompleteCard, undefined, async () => {
     const cardInterval = Number(
       await plugin.settings.getSetting("cardInterval")
@@ -47,30 +63,30 @@ async function onActivate(plugin: ReactRNPlugin) {
       ((await plugin.storage.getSession<number>("seenCards")) || 0) + 1;
     await plugin.storage.setSession("seenCards", seenCards);
     if (seenCards % cardInterval === 0) {
-      // Opens a floating widget popup 180px above the show answer buttons.
-      // The "rn-queue..." string is a classname representing the container
-      // around the show answer buttons.
-      // We use a small setTimeout delay to make sure the queue and show answer
-      // button have finished rendering before trying to show the popup.
+      // Abre el widget de popup flotante 180px por encima del botón de mostrar respuesta.
+      // "rn-queue..." es una clase que representa el contenedor
+      // alrededor de los botones de mostrar respuesta.
+      // Usamos un pequeño delay con setTimeout para asegurarnos de que la cola y el botón
+      // de mostrar respuesta han acabado de renderizarse antes de intentar mostrar el popup.
       setTimeout(() => {
         muestraPerro(plugin, { top: -180, left: 0 }, "rn-queue__show-answer-btn");
       }, 25);
     }
   });
 
-  // Reset the seen cards counter when the user enters the queue.
+  // Reseteamos la cuenta de cartas vistas cuando el usuario entra a la cola.
   plugin.event.addListener(AppEvents.QueueEnter, undefined, () => {
     plugin.storage.setSession("seenCards", 0);
   });
 
-  // A test command so you can see how the popup looks.
+  // Comando para testear la apariencia del popup.
   await plugin.app.registerCommand({
     id: "muestraPerro",
     name: "Ver Perro",
     action: () => muestraPerro(plugin),
   });
 
-  // Register the puppy popup widget component.
+  // Registramos el componente del widget.
   await plugin.app.registerWidget(
     "popupPerro",
     WidgetLocation.FloatingWidget,
