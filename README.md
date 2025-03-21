@@ -1,8 +1,14 @@
 # 😛 perricos
 
-Te tira las foto de los perricos cuando aciertas una flashcard, pero tiene más fotos de perricos
+## Features
+
+- It shows motivational dog popups in the flashcard queue after completing a certain number of cards, but extended with the use of an API and modified motivational messages.
 
 ## Español
+
+### ¿Qué hace?
+
+Te tira las foto de los perricos cuando aciertas una flashcard, pero tiene más fotos de perricos
 
 ### Uso:
 
