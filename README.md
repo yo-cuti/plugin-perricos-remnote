@@ -48,6 +48,8 @@ This plugin waits until the specified number of cards are seen, then it makes a 
 to the [Dog API](https://dog.ceo/dog-api/) to fech the dog image, after that the image
 is shown in the popup, next to a motivational sentence.
 
+
+
 <!-- TODO: Describe usage -->
 
 <!-- ignore-after -->
