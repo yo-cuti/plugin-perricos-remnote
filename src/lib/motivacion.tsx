@@ -1,18 +1,18 @@
 import { getRandomInt } from "./utils";
 
 const motivacionesES = [
-  "Estás bien perrona 🔥",
-  "Eres un hueso duro de roer... 🦴",
-  "Dale colega! 💪",
-  "Enseñales quien es el alfa 🐺",
-  "genial!! OwO **mueve la colita**",
-  "Toma un perrico de regalo 🐕‍🦺",
-  "Americano Dios bendito...🙏⛪",
-  "Quién es mi chic@ guap@... 😏",
-  "¡Bien hecho!",
-  "Buen trabajo 💯",
-  "Genial ✨",
-  "¡Sigue así! 🤑"
+    "Estás bien perrona 🔥",
+    "Eres un hueso duro de roer... 🦴",
+    "Dale colega! 💪",
+    "Enseñales quien es el alfa 🐺",
+    "genial!! OwO **mueve la colita**",
+    "Toma un perrico de regalo 🐕‍🦺",
+    "Americano Dios bendito...🙏⛪",
+    "Quién es mi chic@ guap@... 😏",
+    "¡Bien hecho!",
+    "Buen trabajo 💯",
+    "Genial ✨",
+    "¡Sigue así! 🤑"
 ];
 
 const motivacionesEN = [

@@ -12,11 +12,13 @@ async function muestraPerro(
   position?: { top?: number; bottom?: number; left?: number; right?: number },
   classContainer?: string
 ) {
+  console.log("Abrimos popup")
   await plugin.window.openFloatingWidget(
     "popupPerro",
     position || { top: 0, bottom: 0, left: 0, right: 0 },
     classContainer
   );
+  // console.log("Popup abierto")
 }
 
 async function onActivate(plugin: ReactRNPlugin) {
@@ -52,6 +54,11 @@ async function onActivate(plugin: ReactRNPlugin) {
     }]
   });
 
+  plugin.event.addListener(AppEvents.QueueExit, undefined, async () => {
+    // console.log("Reset de la queue");
+    await plugin.storage.setSession("seenCards", 0)
+  });
+
   // Cuando el usuario completa una carta, comprobamos si ha
   // visto el número de cartas especificado en los ajustes.
   // De ser así mostramos el popup.
@@ -61,8 +68,13 @@ async function onActivate(plugin: ReactRNPlugin) {
     );
     const seenCards: number =
       ((await plugin.storage.getSession<number>("seenCards")) || 0) + 1;
+    // console.log(`Cartas vistas: ${seenCards}`)
+    // console.log(seenCards % cardInterval === 0)
     await plugin.storage.setSession("seenCards", seenCards);
+    // console.log(plugin.storage.getSession("seenCards"))
     if (seenCards % cardInterval === 0) {
+      // console.log("Tira popup")
+      
       // Abre el widget de popup flotante 180px por encima del botón de mostrar respuesta.
       // "rn-queue..." es una clase que representa el contenedor
       // alrededor de los botones de mostrar respuesta.
@@ -76,6 +88,7 @@ async function onActivate(plugin: ReactRNPlugin) {
 
   // Reseteamos la cuenta de cartas vistas cuando el usuario entra a la cola.
   plugin.event.addListener(AppEvents.QueueEnter, undefined, () => {
+    // console.log("Reset de la queue");
     plugin.storage.setSession("seenCards", 0);
   });
 
